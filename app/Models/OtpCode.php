@@ -5,14 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Article extends Model
+class OtpCode extends Model
 {
     use HasFactory;
-    protected $table="articles";
-
     protected $guarded = [];
-
-    public function author() {
-        return $this->belongsTo(User::class, "user_id");
-    }
 }

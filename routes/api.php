@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\UserController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -32,4 +33,5 @@ Route::post('/register', [AuthController::class, "register"])->name("auth.regist
 Route::middleware(['auth:sanctum'] )->group(function() {
     Route::apiResource('articles', ArticleController::class);
     
+    Route::get('users/me', [UserController::class, 'info']);
 });
