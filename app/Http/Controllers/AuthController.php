@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Models\OtpCode;
 use App\Mail\OtpVerification;
@@ -13,7 +13,7 @@ use App\Mail\OtpVerification;
 class AuthController extends Controller
 {
     public function gsignin(Request $request) {
-        
+
     }
 
     public function login(Request $request) {
@@ -33,7 +33,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('token')->plainTextToken;
 
-        return response()->json(["message" => "success", "token"=> $token]); 
+        return response()->json(["message" => "success", "token"=> $token]);
     }
 
     public function register(Request $request) {
@@ -83,7 +83,22 @@ class AuthController extends Controller
         // 4. jika user_id ditemukan => dicek kode otp dari request dan dari database cocok atau tidak
         // 5. kalau cocok, user.is_verified dibuat true, return response success
         // 6. kalau tidak cocok kembalikan pesan error
+        $user = User::where('email', $request['email'])->first();
+        $user_id = $user->id;
+        $otp = OtpCode::where('user_id', $user_id)->where('otp_code', $request['otp_code'])->first();
 
+        if (!$otp) {
+            return response()->json([
+                'message' => 'otp code is invalid!'
+            ], 400);
+        } else {
+            $user->update([
+                'is_verified' => true
+            ]);
+            return response()->json([
+                'message' => 'success confirmed OTP, you may signin now'
+            ]);
+        }
     }
 
 }

@@ -29,9 +29,9 @@ Route::post('gsignin', [AuthController::class, "gsignin"]);
 Route::get('test', [TestController::class, "test"])->name('test')->middleware(['auth:sanctum', 'isarticle.owner']);
 Route::post('/login', [AuthController::class, "login"])->name('auth.login');
 Route::post('/register', [AuthController::class, "register"])->name("auth.register");
-
+Route::post('/otp-verify', [AuthController::class, 'otp_confirmation']);
 Route::middleware(['auth:sanctum'] )->group(function() {
     Route::apiResource('articles', ArticleController::class);
-    
+
     Route::get('users/me', [UserController::class, 'info']);
 });
